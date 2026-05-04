@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.api.routes import router
+from app.core.cleanup import cleanup_scheduler
 
 app = FastAPI(title="PDF Generator Service")
 
