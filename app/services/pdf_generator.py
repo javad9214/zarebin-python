@@ -10,6 +10,7 @@ from reportlab.lib import colors
 from app.core.config import TEMPLATE_PDF, FONT_PATH, OUTPUT_DIR
 from app.utils.text_shaper import shape_text
 import logging
+import uuid
 
 logging.basicConfig(level=logging.INFO)
 
@@ -17,9 +18,8 @@ pdfmetrics.registerFont(TTFont("FontBold", str(FONT_PATH)))
 persian_blue = colors.HexColor("#10246B")
 RED = colors.red
 
-# مختصات‌ها (اینجا تنظیم کن)
+# مختصات‌ها
 FIELD_POSITIONS = {
-    # "fullName": (x, y),
     "fullName": (350, 5450),
     "phoneNumber": (300, 5270),
     "carName": (3100, 4700),
@@ -49,8 +49,26 @@ BOOLEAN_POSITIONS = {
 
 FONT_SIZE = 90  
 
-def generate_pdf(data: dict) -> Path:
+def generate_pdf(data: dict, output_filename: str = None) -> Path:
+    """
+    Generate PDF with data.
+    
+    Args:
+        data: Dictionary containing form data
+        output_filename: Optional custom filename (without .pdf extension)
+    
+    Returns:
+        Path to generated PDF file
+    """
     OUTPUT_DIR.mkdir(exist_ok=True, parents=True)
+    
+    # Generate filename if not provided
+    if output_filename is None:
+        output_filename = f"inspection_{int(datetime.now().timestamp())}.pdf"
+    elif not output_filename.endswith('.pdf'):
+        output_filename += '.pdf'
+    
+    output_path = OUTPUT_DIR / output_filename
 
     reader = PdfReader(str(TEMPLATE_PDF))
     writer = PdfWriter()
@@ -63,6 +81,7 @@ def generate_pdf(data: dict) -> Path:
         c = canvas.Canvas(packet, pagesize=(width, height))
         c.setFont("FontBold", FONT_SIZE)
         c.setFillColor(persian_blue)
+        
         # draw normal text fields
         for field, (x, y) in FIELD_POSITIONS.items():
             value = data.get(field)
@@ -70,15 +89,11 @@ def generate_pdf(data: dict) -> Path:
             if value is None:
                 continue
 
-            # # تبدیل تاریخ به رشته
-            # if isinstance(value, datetime):
-            #     value = value.strftime("%Y-%m-%d %H:%M")
-
             text = shape_text(str(value))
             c.drawString(x, y, text)
 
         # draw boolean X marks
-        c.setFillColor(colors.red)
+        c.setFillColor(RED)
         c.setFont("Helvetica-Bold", 100)
         for field, (x, y) in BOOLEAN_POSITIONS.items():
             value = data.get(field)
@@ -93,8 +108,43 @@ def generate_pdf(data: dict) -> Path:
         page.merge_page(overlay_pdf.pages[0])
         writer.add_page(page)
 
-    output_path = OUTPUT_DIR / f"inspection_{int(datetime.now().timestamp())}.pdf"
     with open(output_path, "wb") as f:
         writer.write(f)
 
     return output_path
+
+
+def generate_pdf_api(payload, custom_filename: str = None):
+    """
+    Generate PDF from API payload.
+    
+    Args:
+        payload: Pydantic model or dictionary
+        custom_filename: Optional custom filename
+    
+    Returns:
+        Dictionary with status and file info
+    """
+    # Convert payload to dict if it's a Pydantic model
+    if hasattr(payload, 'dict'):
+        data = payload.dict()
+    else:
+        data = payload
+    
+    # Generate filename if not provided
+    if custom_filename is None:
+        custom_filename = f"inspection_{uuid.uuid4().hex[:8]}_{int(datetime.now().timestamp())}.pdf"
+    
+    # Generate PDF
+    path = generate_pdf(data, custom_filename)
+    
+    # Return download URL and info
+    filename = path.name
+    return {
+        "status": "success",
+        "message": "PDF generated successfully",
+        "filePath": str(path),
+        "download_url": f"/download/{filename}",
+        "filename": filename,
+        "expires_in": "1 hour"
+    }
