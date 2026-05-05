@@ -26,8 +26,8 @@ FIELD_POSITIONS = {
     "carModel": (3600, 4700),
     "chassisNumber": (1600, 4700),
     "plateNumber": (300, 4900),
-    "inspectionDate": (350, 5750),
-    "expertDescription": (350,5550),
+    "inspectionDate": (350, 5630),
+    "expertDescription": (1150,2550),
 }
 
 BOOLEAN_POSITIONS = {
