@@ -9,10 +9,9 @@ class CarInspectionSchema(BaseModel):
     carModel: str
     chassisNumber: str
     plateNumber: str
-    inspectionDate: datetime
+    inspectionDate: str
     expertDescription: Optional[str] = None
 
-    frontBumper: Optional[bool] = None
     hood: Optional[bool] = None
     frontRightFender: Optional[bool] = None
     frontRightDoor: Optional[bool] = None
@@ -24,5 +23,4 @@ class CarInspectionSchema(BaseModel):
     frontLeftDoor: Optional[bool] = None
     frontLeftFender: Optional[bool] = None
     roof: Optional[bool] = None
-    rearBumper: Optional[bool] = None
     chassis: Optional[bool] = None
