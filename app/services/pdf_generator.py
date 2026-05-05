@@ -31,20 +31,18 @@ FIELD_POSITIONS = {
 }
 
 BOOLEAN_POSITIONS = {
-    "frontBumper": (1600, 4500),
     "hood": (1909, 4015),
-    "frontRightFender": (1600, 4300),
-    "frontRightDoor": (1909, 3496),
-    "rearRightDoor": (1909, 3126),
-    "rearLeftDoor": (1909, 3319),
-    "rearRightFender": (1600, 4000),
-    "trunk": (1909, 3835),
-    "rearLeftFender": (3600, 4100),
-    "frontLeftDoor": (1909, 3666),
-    "frontLeftFender": (3600, 3600),
-    "roof": (1600, 3400),
-    "rearBumper": (1600, 3300),
-    "chassis": (1600, 3200),
+    "frontRightFender": (3120,3487),
+    "frontRightDoor": (1909,3496),
+    "rearRightDoor": (1909,3126),
+    "rearLeftDoor": (1909,3319),
+    "rearRightFender": (3120,3128),
+    "trunk": (1909,3835),
+    "rearLeftFender": (3120,3319),
+    "frontLeftDoor": (1909,3666),
+    "frontLeftFender": (3120,3666),
+    "roof": (3120,4015),
+    "chassis": (3120,3835),
 }
 
 FONT_SIZE = 90  
