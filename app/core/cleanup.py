@@ -3,8 +3,9 @@ import time
 from pathlib import Path
 from apscheduler.schedulers.background import BackgroundScheduler
 
-OUTPUT_DIR = Path("/home/javad/zarebin/zarebin-python/output")
-MAX_AGE_SECONDS = 3600  # 1 hour
+# OUTPUT_DIR = Path("/home/javad/zarebin/zarebin-python/output")
+OUTPUT_DIR = Path("/home/sadathosseini/JAVAD/zarebin/zarebin-python/output")
+MAX_AGE_SECONDS = 18000  # 1 hour
 CLEANUP_INTERVAL_MINUTES = 5
 
 def delete_expired_files():

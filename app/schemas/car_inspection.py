@@ -10,6 +10,7 @@ class CarInspectionSchema(BaseModel):
     chassisNumber: str
     plateNumber: str
     inspectionDate: str
+    inspectionTime: str
     expertDescription: Optional[str] = None
 
     hood: Optional[bool] = None

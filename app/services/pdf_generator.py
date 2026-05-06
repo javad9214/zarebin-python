@@ -27,8 +27,11 @@ FIELD_POSITIONS = {
     "chassisNumber": (1600, 4700),
     "plateNumber": (300, 4900),
     "inspectionDate": (350, 5630),
+    "inspectionTime": (350, 5750),
     "expertDescription": (1150,2550),
 }
+
+RTL_FIELDS = {"fullName", "carName", "expertDescription"}
 
 BOOLEAN_POSITIONS = {
     "hood": (1909, 4015),
@@ -88,7 +91,10 @@ def generate_pdf(data: dict, output_filename: str = None) -> Path:
                 continue
 
             text = shape_text(str(value))
-            c.drawString(x, y, text)
+            if field in RTL_FIELDS:
+                c.drawRightString(x, y, text)
+            else:
+                c.drawString(x, y, text)
 
         # draw boolean X marks
         c.setFillColor(RED)
