@@ -8,7 +8,8 @@ from datetime import datetime
 
 router = APIRouter()
 
-OUTPUT_DIR = Path("/home/javad/zarebin/zarebin-python/output")
+# OUTPUT_DIR = Path("/home/javad/zarebin/zarebin-python/output")
+OUTPUT_DIR = Path("/home/sadathosseini/JAVAD/zarebin/zarebin-python/output")
 
 @router.post("/generate")
 async def generate_pdf_endpoint(data: CarInspectionSchema):
