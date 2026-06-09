@@ -113,6 +113,7 @@ def generate_pdf(data: dict, output_filename: str = None) -> Path:
         writer.add_page(page)
 
     with open(output_path, "wb") as f:
+        writer.add_js("this.zoomType = zoomtype.fitW;")
         writer.write(f)
 
     return output_path
