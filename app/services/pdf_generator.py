@@ -6,6 +6,7 @@ from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib import colors
+import pypdf.generic as generic
 
 from app.core.config import TEMPLATE_PDF, FONT_PATH, OUTPUT_DIR
 from app.utils.text_shaper import shape_text
@@ -112,8 +113,16 @@ def generate_pdf(data: dict, output_filename: str = None) -> Path:
         page.merge_page(overlay_pdf.pages[0])
         writer.add_page(page)
 
+    
     with open(output_path, "wb") as f:
-        writer.add_js("this.zoomType = zoomtype.fitW;")
+        # Set open action to fit full page width in viewer
+        page = writer.pages[0]
+        fit_action = generic.ArrayObject([
+            page.indirect_reference,
+            generic.NameObject("/FitH"),
+            generic.FloatObject(page.mediabox.top)
+        ])
+        writer._root_object[generic.NameObject("/OpenAction")] = fit_action
         writer.write(f)
 
     return output_path
