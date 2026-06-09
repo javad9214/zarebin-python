@@ -115,14 +115,27 @@ def generate_pdf(data: dict, output_filename: str = None) -> Path:
 
     
     with open(output_path, "wb") as f:
-        # Set open action to fit full page width in viewer
-        page = writer.pages[0]
+        # Better options for "full size" / minimal scrolling
         fit_action = generic.ArrayObject([
             page.indirect_reference,
-            generic.NameObject("/FitH"),
-            generic.FloatObject(page.mediabox.top)
+            generic.NameObject("/Fit"),           # Fit entire page in window (best for your case)
+            # Alternative options:
+            # generic.NameObject("/FitH"),        # Fit Width (what you had)
+            # generic.NameObject("/FitV"),        # Fit Height
+            # generic.NameObject("/FitB"),        # Fit Bounding Box
         ])
+        
         writer._root_object[generic.NameObject("/OpenAction")] = fit_action
+        
+        # Optional: Also set default view preferences
+        viewer_prefs = generic.DictionaryObject({
+            generic.NameObject("/ViewArea"): generic.NameObject("/CropBox"),
+            generic.NameObject("/ViewClip"): generic.NameObject("/CropBox"),
+            generic.NameObject("/PrintArea"): generic.NameObject("/CropBox"),
+            generic.NameObject("/PrintClip"): generic.NameObject("/CropBox"),
+        })
+        writer._root_object[generic.NameObject("/ViewerPreferences")] = viewer_prefs
+        
         writer.write(f)
 
     return output_path
