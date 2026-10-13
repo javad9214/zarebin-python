@@ -115,18 +115,18 @@ def generate_pdf(data: dict, output_filename: str = None) -> Path:
 
     
     with open(output_path, "wb") as f:
-        # Better options for "full size" / minimal scrolling
+        # Open the PDF with the whole page fitted to the viewer window,
+        # so on mobile no scrolling/zooming is needed.
+        # The reference MUST be the page inside this writer (writer.pages[0]),
+        # not the template reader's page, otherwise the destination is invalid
+        # and viewers fall back to their default zoom.
         fit_action = generic.ArrayObject([
-            page.indirect_reference,
-            generic.NameObject("/Fit"),           # Fit entire page in window (best for your case)
-            # Alternative options:
-            # generic.NameObject("/FitH"),        # Fit Width (what you had)
-            # generic.NameObject("/FitV"),        # Fit Height
-            # generic.NameObject("/FitB"),        # Fit Bounding Box
+            writer.pages[0].indirect_reference,
+            generic.NameObject("/Fit"),           # fit entire page in window
         ])
-        
+
         writer._root_object[generic.NameObject("/OpenAction")] = fit_action
-        
+
         # Optional: Also set default view preferences
         viewer_prefs = generic.DictionaryObject({
             generic.NameObject("/ViewArea"): generic.NameObject("/CropBox"),

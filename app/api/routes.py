@@ -1,15 +1,12 @@
 from fastapi import APIRouter, HTTPException
+from app.core.config import OUTPUT_DIR
 from app.schemas.car_inspection import CarInspectionSchema
 from app.services.pdf_generator import generate_pdf, generate_pdf_api
 import uuid
 import os
-from pathlib import Path
 from datetime import datetime
 
 router = APIRouter()
-
-OUTPUT_DIR = Path("/home/javad/zarebin/zarebin-python/output")
-# OUTPUT_DIR = Path("/home/sadathosseini/JAVAD/zarebin/zarebin-python/output")
 
 @router.post("/generate")
 async def generate_pdf_endpoint(data: CarInspectionSchema):
