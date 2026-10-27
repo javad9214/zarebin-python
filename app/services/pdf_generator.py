@@ -46,7 +46,12 @@ BOOLEAN_POSITIONS = {
     "frontLeftDoor": (1909,3666),
     "frontLeftFender": (3120,3666),
     "roof": (3120,4015),
+    # The template still has a single شاسی checkbox: filled when either the
+    # front or the rear chassis is damaged (derived in generate_pdf below).
     "chassis": (3120,3835),
+    # TODO: the template has no ستون‌ها row yet. When it is redesigned, add
+    # coordinates here for the single "pillars" flag (accepted by the schema
+    # but not drawable on the current template).
 }
 
 FONT_SIZE = 90  
@@ -100,6 +105,11 @@ def generate_pdf(data: dict, output_filename: str = None) -> Path:
         # draw boolean X marks
         c.setFillColor(RED)
         c.setFont("Helvetica-Bold", 100)
+        # The single شاسی checkbox on the template represents the split
+        # front/rear chassis flags: mark it if either one is damaged.
+        data = dict(data)
+        if data.get("frontChassis") is True or data.get("rearChassis") is True:
+            data["chassis"] = True
         for field, (x, y) in BOOLEAN_POSITIONS.items():
             value = data.get(field)
             logging.info("bool-field=%s value=%s", field, value)

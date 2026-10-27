@@ -7,7 +7,7 @@ class CarInspectionSchema(BaseModel):
     phoneNumber: str
     carName: str
     carModel: str
-    chassisNumber: str
+    chassisNumber: Optional[str] = None
     plateNumber: str
     inspectionDate: str
     inspectionTime: str
@@ -24,4 +24,7 @@ class CarInspectionSchema(BaseModel):
     frontLeftDoor: Optional[bool] = None
     frontLeftFender: Optional[bool] = None
     roof: Optional[bool] = None
-    chassis: Optional[bool] = None
+    # Since Oct 2026: single "chassis" flag split into front/rear + one pillars flag.
+    frontChassis: Optional[bool] = None
+    rearChassis: Optional[bool] = None
+    pillars: Optional[bool] = None
